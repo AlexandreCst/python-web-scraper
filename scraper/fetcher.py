@@ -1,8 +1,7 @@
 """This module allow to make a request and check if there is a success."""
+from scraper.utils import retry
 
 import requests
-
-from requests.exceptions import HTTPError
 
 
 class Fetcher:
@@ -12,6 +11,7 @@ class Fetcher:
         """Constructor initialisation"""
         self.url = url
 
+    @retry(n=3, delay=1)
     def make_request(self, timeout: float=1) -> str | None:
         """Make requests and handle by status code"""
         response = requests.get(self.url, timeout=timeout)
