@@ -19,3 +19,4 @@ class Parser:
         """
         Parse the title of the book
         """
+        
