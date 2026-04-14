@@ -16,8 +16,8 @@ class Parser:
         :param response: Response of the requests provides by fetcher
         :type response: str
         """
-        self.response = response
-        self.articles = self._get_article()
+        self.response = response # Request response
+        self.articles = self._get_article() # Get the whole products of the page
 
     # Public methods - Parsing:
     def parse_title(self) -> list[str]:
@@ -27,7 +27,7 @@ class Parser:
         :return: List of titles
         :rtype: list[str]
         """
-        titles = [article.find("h3").a["title"] for article in self.articles]
+        titles = [article.find("h3").a["title"] for article in self.articles] # List of the titles
         return titles
 
     def parse_price(self) -> list[float]:
@@ -37,7 +37,7 @@ class Parser:
         :return: List of prices
         :rtype: list[float]
         """
-        prices = [float(self._extract_price(article)) for article in self.articles]
+        prices = [float(self._extract_price(article)) for article in self.articles] # List of float converted prices
         return prices
     
     def parse_availability(self) -> list[str]:
@@ -48,7 +48,7 @@ class Parser:
         :return: List of availabilities
         :rtype: list[str]
         """
-        availabilities = [self._extract_availability(article) for article in self.articles]
+        availabilities = [self._extract_availability(article) for article in self.articles] # List of books availabilities
         return availabilities
     
     def parse_rating(self) -> list[str]:
@@ -59,7 +59,7 @@ class Parser:
         :return: List of ratings
         :rtype: list[str]
         """
-        ratings = [self._extract_rating(article) for article in self.articles]
+        ratings = [self._extract_rating(article) for article in self.articles] # List of books rating
         return ratings
     
     # Public method - Parsing orchestration:
@@ -75,6 +75,7 @@ class Parser:
         availability = self.parse_availability()
         rate = self.parse_rating()
 
+        # Make a list of dict that resume all books (title, price, ...) 
         products = [self._build_product(product) for product in zip(title, price, availability, rate)]
         return products
 
@@ -86,8 +87,8 @@ class Parser:
         
         :param self: Description
         """
-        soup = BeautifulSoup(self.response, "html.parser")
-        articles = soup.find_all("article", class_="product_pod")
+        soup = BeautifulSoup(self.response, "html.parser") # BeautifulSoup object
+        articles = soup.find_all("article", class_="product_pod") # Get the balise about articles
         return articles
     
     def _extract_price(self, article: Tag) -> str:
