@@ -3,6 +3,8 @@
 import functools
 import time
 
+from requests.exceptions import HTTPError
+
 # Retry decorator
 def retry(n: int, delay: float):
     def decorator_retry(func):
@@ -13,6 +15,8 @@ def retry(n: int, delay: float):
                 try:
                     value = func(*args, **kwargs)
                     return value # Return the basic function execution if it works
+                except HTTPError: # Catch if the error is fatal
+                    raise # Stop the retry
                 except Exception as e: # Catch the error
                     print(f"Error: {e}")
                     error = e # Update the error value for each loop lap
