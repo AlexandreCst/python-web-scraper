@@ -3,7 +3,9 @@ the price, the availability and the rating of the books in the current scrape
 page"""
 
 from bs4 import BeautifulSoup, Tag
-import requests
+
+from scraper.exceptions import EmptyListError
+from scraper.utils import logger
 
 class Parser:
     """
@@ -89,6 +91,10 @@ class Parser:
         """
         soup = BeautifulSoup(self.response, "html.parser") # BeautifulSoup object
         articles = soup.find_all("article", class_="product_pod") # Get the balise about articles
+        if not articles: # Raise an exception if no articles found
+            logger.error(f"No articles found")
+            raise EmptyListError("No articles found")
+        logger.debug("Success, articles found!")
         return articles
     
     def _extract_price(self, article: Tag) -> str:

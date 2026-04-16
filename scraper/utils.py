@@ -60,5 +60,6 @@ def timer(func):
         end = time.perf_counter() # End time after executing the function
         duration = end - start # Duration calculation of the function execution
         logger.debug(f"{func.__name__} is executed in {duration:.6f}s")
+        print(f"\n{func.__name__} is executed in {duration:.6f}s")
         return value
     return wrapper_timer

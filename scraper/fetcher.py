@@ -1,5 +1,5 @@
 """This module allow to make a request and check if there is a success."""
-from scraper.utils import retry
+from scraper.utils import retry, logger
 
 import requests
 
@@ -17,5 +17,5 @@ class Fetcher:
         response = requests.get(self.url, timeout=timeout)
         response.encoding = "utf-8"
         response.raise_for_status()
+        logger.info(f"{self.url} - <{response.status_code}>")
         return response.text
-

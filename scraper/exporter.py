@@ -4,6 +4,8 @@ import json, csv
 
 from pathlib import Path
 
+from scraper.utils import logger
+
 class Exporter:
     """
     Exporte class
@@ -34,7 +36,8 @@ class Exporter:
         with path.open(mode="w") as json_file: 
             data = json.dumps(self.products, indent=4) # Serialize in JSON
             json_file.write(data) # Write in the new file the data
-
+        
+        logger.info("Success, data are exported in a JSON file!")
     # Methode to export the data in CSV file
     def to_csv(self, filename: str) -> None:
         """
@@ -49,3 +52,5 @@ class Exporter:
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames) 
             writer.writeheader() # Write the header of the file
             writer.writerows(self.products) # Write the data in the CSV file
+
+        logger.info("Success, data are exported in a CSV file!")
