@@ -29,6 +29,7 @@ def main():
             parse_response = parser.Parser(response).get_products()
             products.extend(parse_response)
         except exceptions.EmptyListError: # Catch if no article found
+            utils.logger.error("No article found")
             return
     
     files = exporter.Exporter(products)
