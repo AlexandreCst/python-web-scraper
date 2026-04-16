@@ -1,8 +1,8 @@
 """Orchestrator module"""
 
-from scraper import fetcher, parser, exporter, utils
 from requests.exceptions import HTTPError
 
+from scraper import fetcher, parser, exporter, utils, exceptions
 
 def request_generator(url: str):
     """
@@ -25,8 +25,11 @@ def main():
     """Main function to orchestrate the scraping"""
     products = []
     for response in request_generator("https://books.toscrape.com"):
-        parse_response = parser.Parser(response).get_products()
-        products.extend(parse_response)
+        try:
+            parse_response = parser.Parser(response).get_products()
+            products.extend(parse_response)
+        except exceptions.EmptyListError: # Catch if no article found
+            return
     
     files = exporter.Exporter(products)
     files.to_csv("books_scrape.csv")
@@ -36,4 +39,3 @@ def main():
 if __name__ == "__main__":
     """Execute the script."""
     main()
-
